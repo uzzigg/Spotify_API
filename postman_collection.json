@@ -1,0 +1,161 @@
+{
+  "info": {
+    "name": "Catalogo Musical - Evaluacion",
+    "_postman_id": "1234-5678-catalogo",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Artist",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\": \"Artista Test Evaluador\", \"genre\": \"Rock Acad\\u00e9mico\"}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/artistas",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "artistas"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"status is 201\", function () { pm.response.to.have.status(201); });",
+              "var json = pm.response.json();",
+              "pm.environment.set(\"artistId\", json.id);",
+              "pm.test(\"response has id\", function () { pm.expect(json.id).to.exist; });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create Album",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"title\": \"Album de Prueba\", \"releaseYear\": 2024, \"artistId\": \"{{artistId}}\"}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/albumes",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "albumes"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"status is 201\", function () { pm.response.to.have.status(201); });",
+              "var json = pm.response.json();",
+              "pm.environment.set(\"albumId\", json.id);",
+              "pm.test(\"response has id\", function () { pm.expect(json.id).to.exist; });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create Track",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"title\": \"Track Final de Calificaci\\u00f3n\", \"duration\": 240, \"albumId\": \"{{albumId}}\"}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/tracks",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "tracks"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"status is 201\", function () { pm.response.to.have.status(201); });",
+              "var json = pm.response.json();",
+              "pm.environment.set(\"trackId\", json.id);",
+              "pm.test(\"response has id\", function () { pm.expect(json.id).to.exist; });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Artist With Albums",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/artistas/{{artistId}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "artistas",
+            "{{artistId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+              "var json = pm.response.json();",
+              "pm.test(\"has albums array\", function () { pm.expect(json.albums).to.be.an('array'); });"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
